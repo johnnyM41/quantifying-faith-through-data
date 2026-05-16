@@ -3,7 +3,7 @@ import pandas as pd
 from textblob import TextBlob
 import matplotlib.pyplot as plt
 import streamlit.components.v1 as components
-from PIL import image
+from PIL import Image
 # ---------------- PAGE SETUP ----------------
 
 st.set_page_config(
