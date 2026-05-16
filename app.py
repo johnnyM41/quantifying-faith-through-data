@@ -2,7 +2,7 @@ import streamlit as st
 import pandas as pd
 from textblob import TextBlob
 import matplotlib.pyplot as plt
-
+import streamlit.components.v1 as components
 # ---------------- PAGE SETUP ----------------
 
 st.set_page_config(
@@ -10,95 +10,143 @@ st.set_page_config(
     layout="wide"
 )
 st.markdown("""
+<h2 style='
+color:#ff3b3b;
+font-size:22px;
+font-weight:200;
+text-shadow:0 0 15px rgba(255,0,0,.6);
+margin-bottom:25px;
+'>
+&#8679; Choose your books
+</h2>
+""", unsafe_allow_html=True)
+
+st.image("hero.png", use_container_width=True)
+
+st.markdown("""
 <style>
 
-/* Mechanix 4.0 Dark Theology Theme */
-
-.stApp {
-    background:
-        radial-gradient(circle at top left, #3a2600 0%, transparent 25%),
-        radial-gradient(circle at bottom right, #1f1f1f 0%, transparent 30%),
-        linear-gradient(135deg, #050505 0%, #0d0d0d 50%, #000000 100%);
-    color: #f5f1e8;
+/* MAIN APP */
+.stApp{
+    background-color: black;
+    color: white;
 }
 
-/* Sidebar */
-section[data-testid="stSidebar"] {
-    background: linear-gradient(180deg, #080808, #14110a);
-    border-right: 1px solid #8a6a24;
+/* SIDEBAR */
+section[data-testid="stSidebar"]{
+    background-color: #050505;
 }
 
-/* Main titles */
-h1 {
-    color: #d4af37 !important;
-    text-shadow: 0 0 12px rgba(212, 175, 55, 0.45);
-    font-weight: 800;
+/* HEADINGS */
+h1, h2, h3{
+    color: white !important;
 }
 
-h2, h3 {
-    color: #f1d27a !important;
+/* TEXT */
+p, div, span, label{
+    color: white;
 }
 
-/* Body text */
-p, label, div, span {
-    color: #f5f1e8;
-}
-
-/* Metric cards */
-[data-testid="metric-container"] {
-    background: linear-gradient(145deg, #111111, #1b160b);
+/* METRIC BOXES */
+[data-testid="metric-container"]{
+    background: #0a0a0a;
     border: 1px solid #d4af37;
-    padding: 18px;
-    border-radius: 16px;
-    box-shadow: 0 0 18px rgba(212, 175, 55, 0.18);
+    border-radius: 18px;
+    padding: 15px;
 }
 
-/* Buttons */
-.stButton button {
-    background: linear-gradient(90deg, #7a5c16, #d4af37);
-    color: black;
-    border-radius: 10px;
-    border: none;
-    font-weight: bold;
+/* CHART CONTAINERS */
+.element-container{
+    border-radius: 18px;
 }
 
-/* Inputs */
-.stTextInput input {
-    background-color: #141414;
-    color: #f5f1e8;
-    border: 1px solid #8a6a24;
-    border-radius: 10px;
+</style>
+""", unsafe_allow_html=True)
+st.markdown("""
+<style>
+
+/* MULTISELECT BOX */
+[data-baseweb="select"]{
+    background-color:#0a0a0a !important;
+    border:1px solid #d4af37 !important;
+    border-radius:12px !important;
+    color:white !important;
 }
 
-/* Data table */
-[data-testid="stDataFrame"] {
-    border: 1px solid #8a6a24;
-    border-radius: 12px;
+/* DROPDOWN MENU */
+div[role="listbox"]{
+    background:#050505 !important;
+    border:1px solid #d4af37 !important;
 }
 
-/* Expander */
-.streamlit-expanderHeader {
-    background-color: #111111;
+/* OPTIONS */
+div[role="option"]{
+    background:#050505 !important;
+    color:white !important;
+}
+
+/* HOVER */
+div[role="option"]:hover{
+    background:#1a1a1a !important;
+}
+
+/* SELECTED TAGS */
+[data-baseweb="tag"]{
+    background:#d4af37 !important;
+    color:black !important;
+    border-radius:20px !important;
+}
+
+/* INPUT TEXT */
+input{
+    color:white !important;
+}
+
+</style>
+""", unsafe_allow_html=True)
+st.markdown("""
+<style>
+
+/* DROPDOWN POPUP */
+div[data-baseweb="popover"] > div {
+    background-color: #050505 !important;
+    color: white !important;
+    border: 1px solid #d4af37 !important;
+}
+
+/* OPTIONS */
+ul {
+    background-color: #050505 !important;
+}
+
+li {
+    background-color: #050505 !important;
+    color: white !important;
+}
+
+/* HOVER */
+li:hover {
+    background-color: #1a1a1a !important;
     color: #d4af37 !important;
-    border-radius: 10px;
-}
-
-/* Sidebar labels */
-section[data-testid="stSidebar"] label {
-    color: #d4af37 !important;
-}
-
-/* Horizontal rule */
-hr {
-    border-color: #8a6a24;
 }
 
 </style>
 """, unsafe_allow_html=True)
 
-st.title("⚜️ Quantifying Faith Through Data")
 
-st.write("Mechanix 4.0 inspired scripture intelligence — emotion, theme, and meaning mapped through data.")
+st.markdown("""
+<h3 style='
+color:#ff3b3b;
+font-size:32px;
+font-weight:200;
+text-shadow:0 0 12px rgba(255,0,0,.5);
+margin-top:-10px;
+margin-bottom:50px;
+'>
+Mechanix 4.0 inspired scripture intelligence — emotion, theme, and meaning mapped through data.
+</h3>
+""", unsafe_allow_html=True)
+
 
 # ---------------- LOAD DATA ----------------
 
@@ -127,17 +175,14 @@ def load_data():
 df = load_data()
 
 # ---------------- SIDEBAR ----------------
-
 st.sidebar.header("⚙️ Filters")
 
-book_options = sorted(df['book'].unique())
-
-default_books = [book for book in ['Genesis', 'Psalms'] if book in book_options]
+st.sidebar.markdown("⬇️ Click the arrow to explore books")
 
 books = st.sidebar.multiselect(
     "Select Books",
-    book_options,
-    default=default_books
+    df['book'].unique(),
+    default=['Genesis','Psalms']
 )
 
 sentiment_range = st.sidebar.slider(
