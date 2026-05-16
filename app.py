@@ -3,6 +3,7 @@ import pandas as pd
 from textblob import TextBlob
 import matplotlib.pyplot as plt
 import streamlit.components.v1 as components
+from PIL import image
 # ---------------- PAGE SETUP ----------------
 
 st.set_page_config(
@@ -20,7 +21,7 @@ margin-bottom:25px;
 &#8679; Choose your books
 </h2>
 """, unsafe_allow_html=True)
-
+hero = Image.open("hero.png)
 st.image("hero.png", use_container_width=True)
 
 st.markdown("""
