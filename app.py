@@ -21,7 +21,7 @@ margin-bottom:25px;
 &#8679; Choose your books
 </h2>
 """, unsafe_allow_html=True)
-hero = Image.open("hero.png)
+hero = Image.open("hero.png")
 st.image("hero.png", use_container_width=True)
 
 st.markdown("""
